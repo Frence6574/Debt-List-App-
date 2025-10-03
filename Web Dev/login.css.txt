@@ -1,0 +1,118 @@
+login.css
+
+:root {
+    --bg-color: #E0F7FA;
+    --text-color: #01579B;
+    --accent-color: #0288D1;
+    --secondary-color: #B3E5FC;
+    --shadow-color: rgba(1, 87, 155, 0.08);
+    --container-bg: #FFFFFF;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    text-align: center;
+    padding: 40px;
+    background-color: var(--container-bg);
+    border-radius: 24px;
+    box-shadow: 0 8px 30px var(--shadow-color);
+    width: 90%;
+    max-width: 400px;
+}
+
+h1 {
+    color: var(--accent-color);
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    margin-top: 5px;
+}
+
+.login-form-container {
+    position: relative;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h2 {
+    color: var(--text-color);
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+input {
+    width: 100%;
+    padding: 14px 14px 14px 40px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 10px rgba(56, 178, 172, 0.2);
+}
+
+button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(56, 178, 172, 0.3);
+}
+
+.forgot-password {
+    margin-top: -10px;
+    text-align: center;
+}
+
+.forgot-password a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}

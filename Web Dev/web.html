@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple User Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .success-message {
+            color: green;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Information Form</h1>
+    
+    <div id="userForm">
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" min="0" required>
+        </div>
+        
+        <button id="submitBtn">Submit</button>
+    </div>
+    
+    <div id="successMessage" class="success-message">
+        Data submitted successfully!
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <script>
+        // Initialize Firebase with the new configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnDBIzPi2oqnONsyLer7j1HzwBQsHaYn0",
+            authDomain: "web-dev-db625.firebaseapp.com",
+            databaseURL: "https://web-dev-db625-default-rtdb.firebaseio.com",
+            projectId: "web-dev-db625",
+            storageBucket: "web-dev-db625.firebasestorage.app",
+            messagingSenderId: "434839404809",
+            appId: "1:434839404809:web:c94fb67a13d96f44e693d8",
+            measurementId: "G-L28JT7TZDG"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Get a reference to the database
+        const database = firebase.database();
+        
+        // Handle form submission
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            // Get form values
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const age = document.getElementById('age').value;
+            
+            // Validate input
+            if (!firstName || !lastName || !age) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Create data object
+            const userData = {
+                firstName: firstName,
+                lastName: lastName,
+                age: parseInt(age),
+                timestamp: Date.now()
+            };
+            
+            // Push data to Firebase
+            database.ref('users').push(userData)
+                .then(function() {
+                    // Clear the form
+                    document.getElementById('firstName').value = '';
+                    document.getElementById('lastName').value = '';
+                    document.getElementById('age').value = '';
+                    
+                    // Show success message
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.style.display = 'block';
+                    
+                    // Hide success message after 3 seconds
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                })
+                .catch(function(error) {
+                    console.error('Error writing to Firebase Database', error);
+                    alert('Error submitting data: ' + error.message);
+                });
+        });
+    </script>
+</body>
+</html>

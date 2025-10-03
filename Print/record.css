@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.record {
+    width: 57.5mm; /* Matches thermal printer width */
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 15px; /* Smaller font for more content */
+    line-height: 1.2;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+h1 {
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+}
+
+h2 {
+    font-size: 15px;
+    margin: 8px 0;
+    text-align: center;
+}
+
+h3 {
+    font-size: 15px;
+    margin: 8px 0;
+    text-align: center;
+}
+
+p, li {
+    margin: 3px 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #000;
+    margin: 8px 0;
+}

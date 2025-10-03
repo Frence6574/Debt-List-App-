@@ -1,0 +1,3821 @@
+:root {
+    --bg-color: #f0f4f8;          /* Light gradient base */
+    --text-color: #1a3c34;        /* Deep teal */
+    --accent-color: #00d4ff;      /* Bright cyan */
+    --secondary-color: #7b2cbf;   /* Vibrant purple */
+    --shadow-color: rgba(26, 60, 52, 0.15);
+    --container-bg: #ffffff;      /* White with slight transparency */
+    --button-text: #ffffff;       /* White */
+    --border-radius: 16px;
+    --transition: all 0.3s ease-in-out;
+    --success-color: #06d6a0;     /* Fresh green */
+    --info-color: #118ab2;        /* Deep blue */
+    --modal-bg: #ffffff;          /* White */
+    --modal-shadow: rgba(26, 60, 52, 0.25);
+    --gradient-bg: linear-gradient(135deg, #00d4ff, #7b2cbf); /* Catchy gradient */
+    --danger-color: #f44336;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--gradient-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    padding: 1rem;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top:0px;
+}
+
+h1 {
+    text-align: center;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin: 1rem 0;
+    color: var(--accent-color);
+    text-shadow: 2px 2px 4px var(--shadow-color);
+    background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hamburger-menu {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1001;
+    color: var(--button-text);
+    background: var(--gradient-bg);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px var(--shadow-color);
+    transition: var(--transition);
+}
+
+.hamburger-menu:hover {
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Hide hamburger menu when dashboard is visible */
+#dashboard:not([style*="display: none"]) ~ .hamburger-menu {
+    display: none;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    left: -100%;
+    width: min(80vw, 300px);
+    height: 100%;
+    background: var(--container-bg);
+    box-shadow: 4px 0 20px var(--shadow-color);
+    transition: left 0.4s ease;
+    padding: 5rem 1.5rem 1.5rem;
+    z-index: 1000;
+    border-radius: 0 20px 20px 0;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.theme-toggle, .logout-btn, .sidebar-btn, .profile-btn {
+    background: var(--gradient-bg);
+    border: none;
+    color: var(--button-text);
+    padding: 0.9rem 1.2rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    width: 100%;
+    margin: 0.8rem 0;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: var(--transition);
+}
+
+.theme-toggle:hover, .logout-btn:hover, .sidebar-btn:hover, .profile-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 18px var(--shadow-color);
+}
+
+.logout-btn {
+    background: var(--danger-color);
+}
+
+/* Main Container */
+#main-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    background: var(--container-bg);
+    box-shadow: 0 10px 40px var(--shadow-color);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--border-radius);
+    flex: 1;
+    padding-top: 0px;
+    margin-top: 0px;
+    border-radius: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+#search-bar {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    border: 2px solid var(--accent-color);
+    background: var(--container-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    margin-bottom: 10px;
+}
+
+#search-bar:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 6px 20px rgba(123, 44, 191, 0.3);
+    transform: scale(1.02);
+}
+
+.add-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: var(--gradient-bg);
+    color: var(--button-text);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px var(--shadow-color);
+    border: none;
+    transition: var(--transition);
+}
+
+.add-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 10px 30px rgba(123, 44, 191, 0.5);
+}
+
+.add-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Debtors List */
+#debtors-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0px;
+    margin: 0px;
+}
+
+#debtors-list li {
+    padding: 3px;
+    padding-right: 0px;
+    margin: 3px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 6px 15px var(--shadow-color);
+    transition: var(--transition);
+    border-left: 5px solid var(--accent-color);
+}
+
+#debtors-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(123, 44, 191, 0.1));
+}
+
+/* Responsive Design for Debtors List */
+@media (max-width: 768px) {
+    #debtors-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Add styles for selected debtor */
+.debtor-entry.selected {
+    border-left: 4px solid var(--accent-color);
+    background-color: var(--secondary-color);
+    transform: translateX(4px);
+}
+
+.debtor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.debtor-header .debtor-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.debtor-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--shadow-color);
+}
+
+.toggle-details {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 0.3s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.toggle-details:hover {
+    background-color: var(--secondary-color);
+    transform: rotate(180deg);
+}
+
+.debtor-details {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--secondary-color);
+}
+
+.debtor-details ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.debtor-details li {
+    padding: 12px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    background-color: var(--container-bg);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    border-left: 3px solid var(--info-color);
+}
+
+.debtor-details li:hover {
+    transform: translateY(-2px);
+}
+
+.debtor-details li span {
+    display: block;
+    font-size: 14px;
+    margin-top: 4px;
+    color: var(--text-color);
+}
+
+.debtor-details .overdue span {
+    color: var(--danger-color);
+}
+
+/* Overdue Items */
+.debtor-details .overdue {
+    color: var(--danger-color);
+    border-left: 3px solid var(--danger-color) !important;
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.debtor-details .overdue:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2) !important;
+}
+
+.product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-name {
+    font-weight: 600;
+}
+
+.product-meta {
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.product-price {
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+/* Input Group */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-prefix {
+    position: absolute;
+    left: 16px;
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 0.8;
+    z-index: 2;
+    pointer-events: none; /* Prevents the prefix from interfering with input */
+}
+
+.input-group input {
+    padding-left: 56px !important; /* Increased padding to prevent overlap */
+    width: 100%;
+}
+
+/* Action Buttons */
+.action-buttons, .form-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.action-buttons button, .form-buttons button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    flex: 1;
+    min-width: 120px;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-buttons button:hover, .form-buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.action-buttons button:active, .form-buttons button:active {
+    transform: translateY(0px);
+}
+
+/* Media Query for Medium Screens (481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .action-buttons, .form-buttons {
+        grid-template-columns: repeat(3, 1fr); /* 3x3 grid for medium screens */
+        gap: 5px;
+    }
+    .action-buttons button, .form-buttons button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        min-width: 100px;
+    }
+}
+
+/* Media Query for Small Screens (480px and below) */
+@media (max-width: 480px) {
+    .action-buttons, .form-buttons {
+        grid-template-columns: 1fr; /* Stack buttons vertically on small screens */
+        gap: 3px;
+    }
+    .action-buttons button, .form-buttons button {
+        padding: 8px 12px;
+        font-size: 8px;
+        min-width: 80px;
+        margin: 0px;
+    }
+}
+
+.add-product-btn {
+    background: var(--gradient-bg); /* Override with gradient */
+    color: var(--button-text);
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-product-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px var(--shadow-color);
+}
+
+.add-product-btn:active {
+    transform: translateY(0);
+}
+
+.add-product-btn:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.pay-btn {
+    background-color: var(--success-color) !important;
+}
+
+.delete-btn {
+    background-color: var(--danger-color) !important;
+}
+
+.history-btn {
+    background-color: var(--secondary-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Cancel Buttons */
+#cancel-product-btn, #cancel-debtor-btn, #cancel-payment-btn {
+    background-color: #64748b;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1003;
+    backdrop-filter: blur(5px);
+    overflow-y: auto;  /* Make modal container scrollable */
+}
+
+.modal-content {
+    background-color: var(--modal-bg);
+    margin: 3% auto;
+    padding: 32px;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 16px 40px var(--modal-shadow);
+    max-height: 95vh;  /* Limit height to 90% of viewport height */
+    overflow-y: auto;  /* Make content scrollable */
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 2px;
+    color: var(--accent-color);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-color);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.close-modal:hover {
+    background-color: var(--secondary-color);
+    color: var(--accent-color);
+}
+
+/* Form Elements - Updated to match date input styling */
+input,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
+    font-family: sans-serif , sans-serif, sans-serif;
+    width: 100%;
+    padding: 16px 20px;
+    margin: 4px 0;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px var(--shadow-color);
+    font-weight: 600;
+}
+
+input:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(56, 178, 172, 0.2);
+}
+
+/* Due date styling */
+input[type="date"] {
+    width: 100%;
+    padding: 16px 20px;
+    margin: 4px 0;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(56, 178, 172, 0.2);
+}
+
+/* Due date display in debtor details */
+.debtor-details div:nth-child(2) {
+    margin-top: 8px;
+    color: black;
+    font-weight: 600;
+}
+
+/* Total Price Display */
+#product-total-price, #new-product-total-price {
+    display: block;
+    font-weight: bold;
+    color: var (--accent-color);
+    margin: 10px 0;
+    font-size: 20px;
+    text-align: center;
+    padding: 12px;
+    background-color: var(--bg-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Style for Product Choices */
+#payment-product-choices {
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.product-choice-button {
+    padding: 14px 20px;
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: left;
+    transition: all 0.3s;
+    position: relative;
+    padding-right: 50px;
+    color: white;
+}
+
+.product-choice-button:hover {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(56, 178, 172, 0.3);
+}
+
+.product-choice-button::after {
+    content: "→";
+    position: absolute;
+    right: 20px;
+    font-size: 18px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.product-choice-button:hover::after {
+    opacity: 1;
+    right: 16px;
+}
+
+#pay-all-products {
+    background-color: var(--info-color);
+    color: white;
+    font-weight: 600;
+    width: 100%;
+}
+
+#pay-all-products:hover {
+    background-color: #3182ce;
+}
+
+/* Payment History Styles */
+#payment-history-list {
+    list-style: none;
+    padding: 0;
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+}
+
+#payment-history-list li {
+    padding: 16px;
+    margin: 10px 0;
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.payment-date {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.payment-amount {
+    font-weight: 700;
+    color: var (--success-color);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: var(--secondary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #main-container {
+        margin: 20px;
+        padding: 24px;
+        border-radius: 0px;
+        padding-top: 0px;
+        margin-top: 0px;
+    }
+
+    .modal-content {
+        margin: 30% auto;
+        padding: 24px;
+        width: 95%;
+    }
+    
+    h1 {
+        font-size: 26px;
+    }
+    
+    .hamburger-menu {
+        top: 16px;
+        left: 16px;
+    }
+}
+
+/* Styles for screen sizes up to 768px */
+@media (max-width: 768px) {
+  body {
+    padding: 0%; /* Example padding for smaller screens */
+    padding-left: 0%;
+    padding-right: 0%;
+  }
+}
+
+/* Styles for screen sizes up to 600px */
+@media (max-width: 600px) {
+  h1 {
+    margin: 10px; /* Example margin for smaller screens */
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger-menu {
+    /* Example: Move to the top-right corner on smaller screens */
+    top: 5px;
+    right: 1px;
+  }
+}
+
+@media (max-width: 768px) {
+  #search-bar {
+    padding: 5px;
+  }
+}
+    
+
+/* Dashboard Summary Cards */
+.dashboard-summary {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    background-color: var(--container-bg);
+    padding: 16px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    flex: 1;
+    text-align: center;
+}
+
+/* Recent Transactions and Top Debtors */
+.recent-transactions, .top-debtors {
+    background-color: var(--container-bg);
+    padding: 16px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    margin-bottom: 24px;
+}
+
+.recent-transactions ul, .top-debtors ul {
+    list-style: none;
+    padding: 0;
+}
+
+.recent-transactions li, .top-debtors li {
+    padding: 12px;
+    margin: 8px 0;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Style for the Back button */
+.back-btn {
+    background-color: var(--secondary-color);
+    color:white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 16px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* Add smooth transitions for theme changes */
+body * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Update button hover states */
+.theme-toggle:hover {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+}
+
+/* Add smooth scrollbar styling */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--info-color);
+}
+
+/* Ensure modal forms are properly spaced */
+.modal form {
+    padding-right: 10px; /* Add space for scrollbar */
+}
+
+/* Payment History Modal */
+#payment-history-modal .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+#payment-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#payment-history-list li {
+    padding: 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#payment-history-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.payment-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.payment-item::before {
+    content: "\f155"; /* FontAwesome icon for dollar sign */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 8px;
+    color: var(--accent-color);
+}
+
+.payment-item span {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.payment-item span:first-child {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.payment-item span:nth-child(3) {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.payment-item span:last-child {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Modal Scrollable Content Styles */
+#product-form-modal .modal-content,
+#payment-form-modal .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-right: 16px; /* Add padding for scrollbar */
+    max-width: 800px; /* Increased from 500px */
+    width: 95%;
+    padding: 15px;
+}
+
+/* Product Selection Area */
+#product-selection {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 16px;
+}
+
+/* Payment History List */
+#payment-history-list {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+}
+
+/* Product Choices Container */
+#payment-product-choices {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin: 16px 0;
+}
+
+/* Consistent scrollbar styling for all scrollable areas */
+#product-selection::-webkit-scrollbar,
+#payment-history-list::-webkit-scrollbar,
+#payment-product-choices::-webkit-scrollbar {
+    width: 8px;
+}
+
+#product-selection::-webkit-scrollbar-track,
+#payment-history-list::-webkit-scrollbar-track,
+#payment-product-choices::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border: 4px;
+}
+
+#product-selection::-webkit-scrollbar-thumb,
+#payment-history-list::-webkit-scrollbar-thumb,
+#payment-product-choices::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+#product-selection::-webkit-scrollbar-thumb:hover,
+#payment-history-list::-webkit-scrollbar-thumb:hover,
+#payment-product-choices::-webkit-scrollbar-thumb:hover {
+    background: var(--info-color);
+}
+
+/* Payment Form Modal Styles */
+#payment-form-modal .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Remove individual scrolling from sections */
+#product-selection {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+    margin-bottom: 16px;
+}
+
+#payment-product-choices {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+}
+
+/* Payment amount input section */
+#payment-amount-input {
+    margin-top: 16px;
+}
+
+/* Dashboard Charts */
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 10px 0;
+}
+
+.chart-container {
+    background-color: var(--container-bg);
+    padding-left: 0px;
+    padding-right: 0px;;
+    padding-bottom: 50px;
+    padding-top: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    height: 300px;
+}
+
+.chart-container h3 {
+    margin-bottom: 0px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .dashboard-charts {
+        grid-template-columns: 1fr;
+    }
+}
+
+.product-delete-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--danger-color) !important;
+    color: white !important;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    transition: all 0.2s;
+}
+
+.product-delete-btn:hover {
+    background-color: #d32f2f !important;
+    transform: translateY(-50%) scale(1.1);
+}
+
+
+/* Profile Button */
+.profile-btn {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 14px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    width: 100%;
+    margin-top: 16px;
+    font-weight: 600;
+    transition: transform 0.2s, background-color 0.2s;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.profile-btn:hover {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    transform: translateY(-2px);
+}
+
+/* Profile Modal Styles */
+#profile-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: var(--bg-color);
+    border-radius: var(--border-radius);
+}
+
+.profile-field {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-field label {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.profile-field rheumatic {
+    color: var(--text-color);
+}
+
+/* Add Account Form */
+#add-account-form input {
+    margin-bottom: 8px;
+}
+
+.password-match {
+    color: var(--success-color);
+    font-size: 14px;
+    margin-top: -61px;
+    margin-bottom: 23px;
+}
+
+.password-mismatch {
+    color: var(--danger-color);
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+/* Add to debt.css */
+.sidebar-btn {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 14px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    width: 100%;
+    margin-top: 16px;
+    font-weight: 600;
+    transition: transform 0.2s, background-color 0.2s;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.sidebar-btn:hover {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    transform: translateY(-2px);
+}
+
+#archive-list, #sent-reminders-list {
+    list-style: none;
+    padding: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+#archive-list li, #sent-reminders-list li {
+    padding: 12px;
+    margin: 8px 0;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.reminder-status {
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.reminder-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.reminder-failure {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.reminder-pending {
+    background-color: var(--info-color);
+    color: white;
+}
+
+/* Add to debt.css */
+.archived-debtor {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    margin-bottom: 8px;
+}
+
+.debtor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.restore-btn {
+    background-color: var(--info-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.restore-btn:hover {
+    background-color: #3182ce;
+}
+
+.reminder-item {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    margin-bottom: 8px;
+}
+
+.reminder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.reminder-message {
+    margin-top: 8px;
+    padding: 8px;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 4px;
+    font-style: italic;
+}
+
+.reminder-error {
+    margin-top: 8px;
+    color: var(--danger-color);
+    font-size: 14px;
+}
+
+.reminder-status.success {
+    background-color: var(--success-color);
+    color: white;
+}
+.reminder-status.failure {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+
+.print-btn {
+    background-color: var(--info-color) !important;
+    color: white !important;
+}
+
+.print-btn:hover {
+    background-color: #3182ce !important;
+}
+
+/* Dashboard Lists Container */
+.dashboard-lists {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+/* Styling for Recent Transactions and Top Debtors sections */
+.recent-transactions,
+.top-debtors {
+    flex: 1;
+    background-color: var(--container-bg); /* Matches chart background */
+    padding: 16px;
+    border-radius: var(--border-radius); /* Matches chart border radius */
+    box-shadow: 0 4px 12px var(--shadow-color); /* Matches chart shadow */
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .dashboard-lists {
+        flex-direction: column;
+    }
+}
+
+.payment-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.payment-item span {
+    margin-right: 15px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.restore-btn, .delete-permanent-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.restore-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.restore-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-permanent-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.delete-permanent-btn:hover {
+    background-color: #d32f2f;
+}
+
+.profile-password {
+    position: relative;
+    margin: 5px 0;
+}
+
+.profile-password input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+.profile-password .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-color);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.profile-password input[type="password"] {
+    padding-right: 40px;
+}
+
+#add-product-entry {
+    /* Base styling */
+    background: var(--gradient-bg); /* Gradient from cyan (#00d4ff) to purple (#7b2cbf) */
+    color: var(--button-text); /* White text */
+    border: none; /* No border for a clean look */
+    padding: 12px 20px; /* Comfortable padding for clickability */
+    border-radius: 50px; /* Pill-shaped to match other buttons */
+    cursor: pointer; /* Indicates interactivity */
+    font-weight: 600; /* Bold text for emphasis */
+    font-size: 16px; /* Legible size */
+    
+    /* Flex layout to center icon and text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between icon and text */
+    
+    /* Visual enhancements */
+    box-shadow: 0 4px 12px var(--shadow-color); /* Subtle shadow for depth */
+    transition: all 0.3s ease-in-out; /* Smooth transitions for hover/active */
+    margin: 10px 0; /* Spacing above and below */
+}
+
+/* Hover state */
+#add-product-entry:hover {
+    transform: translateY(-3px); /* Slight lift effect */
+    box-shadow: 0 6px 14px var(--shadow-color); /* Enhanced shadow */
+}
+
+/* Active state */
+#add-product-entry:active {
+    transform: translateY(0); /* Return to original position */
+    box-shadow: 0 2px 8px var(--shadow-color); /* Reduced shadow for press effect */
+}
+
+/* Focus state for accessibility */
+#add-product-entry:focus {
+    outline: 2px solid var(--accent-color); /* Cyan outline */
+    outline-offset: 2px; /* Offset for visibility */
+}
+
+/* Icon styling */
+#add-product-entry i {
+    font-size: 16px; /* Matches text size */
+}
+
+#transaction-selection-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+#transaction-selection-list label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Transaction Header Styling */
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 0;
+}
+
+.columns-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.left-column span:first-child {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.left-column span:last-child {
+    color: black;
+    font-weight: 600;
+}
+
+.right-column span {
+    margin-bottom: 5px;
+}
+
+.right-column span:last-child {
+    margin-bottom: 0;
+}
+
+.overdue .right-column span:last-child {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* Transaction Details Styling */
+.transaction-details {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.transaction-details ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.transaction-details li {
+    margin-bottom: 5px;
+}
+
+/* Enhance Existing Transaction List Item Styling */
+.debtor-details ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.debtor-details li {
+    padding: 12px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    background-color: var(--container-bg);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    border-left: 3px solid var(--info-color);
+    transition: transform 0.2s ease;
+}
+
+.debtor-details li:hover {
+    transform: translateY(-2px);
+}
+
+.debtor-details .overdue {
+    border-left: 3px solid var(--danger-color);
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.debtor-details .overdue:hover {
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+}
+
+/* Product Inventory Styles */
+#products-modal .modal-content {
+    max-width: 800px;
+}
+
+@media (max-width: 850px) {
+    #products-modal .modal-content {
+        max-width: 90%;
+    }
+}
+
+#products-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+@media (max-width: 768px) {
+    #products-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    #products-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+#products-list li {
+    display: grid;
+    grid-template-areas:
+        "name name"
+        "edit delete";
+    gap: 8px;
+    padding: 16px;
+    background-color: var(--bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: transform 0.2s;
+}
+
+#products-list li span {
+    grid-area: name;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+#products-list li .edit-product-btn {
+    grid-area: edit;
+    width: 100%;
+}
+
+#products-list li .delete-product-btn {
+    grid-area: delete;
+    width: 100%;
+}
+
+#add-product-inventory-btn {
+    background: var(--gradient-bg);
+    color: var(--button-text);
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#add-product-inventory-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.edit-product-btn {
+    background-color: var(--info-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.edit-product-btn:hover {
+    background-color: #0056b3;
+}
+
+.product-select {
+    width: 100%;
+    padding: 16px 20px;
+    margin: 4px 0;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+.product-price-display, .product-total-display {
+    display: inline-block;
+    margin: 8px 10px;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.remove-product-entry {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+.remove-product-entry:hover {
+    background-color: #d32f2f;
+}
+
+#transaction-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+@media (min-width: 769px) {
+  .product-entry {
+    grid-template-areas:
+      "name quantity price"
+      "total . remove";
+    grid-template-columns: 1fr auto auto; /* Flexible name, auto for quantity/price/remove */
+    grid-template-rows: auto auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-entry {
+    grid-template-columns: 1fr; /* Single column for vertical stacking */
+    grid-template-areas:
+      "name"
+      "quantity"
+      "price"
+      "total"
+      "remove";
+    grid-template-rows: repeat(5, auto); /* One row per element */
+    gap: 6px; /* Smaller gap for mobile */
+    padding: 6px;
+  }
+}
+
+#product-list {
+    padding-right: 10px; /* Optional: remove if spacing adjusts poorly */
+    margin-bottom: 0px;
+}
+
+.product-entry input,
+.product-entry .product-total-display {
+    margin: 0;
+}
+
+.product-total-display {
+    font-weight: 600;
+    color: var(--accent-color);
+    white-space: nowrap;
+}
+
+#transaction-due {
+    margin: 20px 0;
+}
+
+#new-product-total-price {
+    font-size: medium;
+    font-weight: 700;
+    padding: 8px;
+    margin: 5px 0;
+    text-align: left;
+    border-top: 2px solid var(--secondary-color);
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#add-product-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#submit-transaction {
+    background-color: #008CBA;
+    color: white;
+}
+
+#grand-total {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.product-entry {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto; /* Name, Quantity, Price, Total, Remove */
+    gap: 15px;
+    align-items: center;
+    background-color: var(--bg-color);
+    padding: 5px;
+    border-radius: 12px;
+    margin-bottom: 0px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.product-total {
+    font-weight: 600;
+    color: black;
+    white-space: nowrap;
+    padding: 16px 20px;
+}
+
+@media (max-width: 768px) {
+    .product-entry {
+        grid-template-columns: 1fr; /* Stack on small screens */
+        gap: 1.5px;
+    }
+    
+    .product-entry input,
+    .product-entry {
+        width: 100%;
+        padding: 7px;
+    }   
+
+    .product-total {
+        text-align: left;
+        padding: 10px 0;
+        width: 50%;
+    }
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+#transaction-due {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 480px) {
+    .form-buttons button {
+        width: 100%;
+    }
+}
+
+#product-search {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    border: 2px solid var(--accent-color);
+    background: var(--container-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+#product-search:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 6px 20px rgba(123, 44, 191, 0.3);
+    transform: scale(1.02);
+}
+
+/* Make archive and sent reminders modals wider */
+#archive-modal .modal-content,
+#sent-reminders-modal .modal-content {
+    max-width: 800px;
+}
+
+#transaction-due-display {
+    display: block;
+    padding: 3px 7px;
+    margin: 4px 0;
+    border: 2px solid var(--secondary-color); /* Match input field borders */
+    border-radius: 12px;
+    background-color: var(--bg-color); /* Match form background */
+    color: var(--text-color); /* Match text color */
+    font-size: 16px;
+    box-shadow: 0 2px 6px var(--shadow-color); /* Match input field shadow */
+}
+
+.product-name-wrapper {
+    position: relative;
+    flex: 2;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+[data-theme="dark"] .suggestions {
+    background-color: #2a2a2a;
+    border-color: #444;
+}
+
+[data-theme="dark"] .suggestion-item:hover {
+    background-color: #3a3a3a;
+}
+
+/* In debt.css, add the following styles for the checkout button */
+.checkout-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--gradient-bg);
+    color: var(--button-text);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px var(--shadow-color);
+    border: none;
+    transition: left 0.4s ease, transform 0.3s ease;
+    z-index: 999; /* Below sidebar z-index of 1000 */
+}
+
+.checkout-btn:hover {
+    transform: scale(1.1);
+}
+
+.sidebar.active ~ .checkout-btn {
+    left: 320px; /* Moves right when sidebar (max 300px) is open */
+}
+
+/* Styles for Checkout Grand Total to match Transaction Grand Total */
+#checkout-grand-total {
+    font-size: 15px;
+    font-weight: 650;
+    padding: 8px;
+    margin: 20px 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: left;
+    border-top: 2px solid var(--secondary-color);
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Styles for Add Checkout Product Entry button to match Transaction counterpart */
+#add-checkout-product-entry {
+    width: 100%;
+    max-width: 800px;
+    margin: 0px auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 8px 5px;
+    border-radius: 50px;
+    background: var(--gradient-bg);
+    color: var(--button-text);
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: all 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+
+#add-checkout-product-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px var(--shadow-color);
+}
+
+#add-checkout-product-entry:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+#add-checkout-product-entry:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Increase the max-width for the checkout form modal content */
+#checkout-form-modal .modal-content {
+    max-width: 800px; /* Adjust this value as needed, e.g., 90vw for responsiveness */
+}
+
+/* Ensure the form inside the modal utilizes the full width */
+#checkout-form {
+    width: 100%;
+}
+
+#checkout-btn {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    left: auto;
+}
+
+@media (max-width: 768px) {
+    .sidebar.active ~ .checkout-btn {
+        left: 0; /* Moves to left edge on small screens */
+    }
+    .checkout-btn {
+        position: fixed;
+        bottom: 4.7rem;
+        right: 2rem;
+        left: auto;
+    }
+}
+
+/* Hide checkout button when dashboard is visible */
+#dashboard:not([style*="display: none"]) ~ #checkout-btn {
+    display: none;
+}
+
+.low-stock {
+    color: var(--danger-color);
+}
+
+body {
+    overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+/* Tiny Devices */
+@media (max-width: 480px) {
+    .add-btn {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+    .hamburger-menu {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+}
+
+.debtor-details ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+@media (max-width: 768px) {
+    #debtors-list {
+        grid-template-columns: 1fr;
+    }
+    .debtor-entry {
+        padding: 1rem;
+    }
+    .debtor-header {
+        font-size: 1rem;
+    }
+    .debtor-details li {
+        padding: 10px;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #debtors-list {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    .debtor-details ul {
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+}
+
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-charts {
+        grid-template-columns: 1fr;
+    }
+    .chart-container {
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-container {
+        height: 300px;
+    }
+    .chart-container h3 {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    #main-container {
+        width: 100%;
+        margin: 0;
+        padding: 0px;
+        border-radius: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    #main-container {
+        padding: 0px;
+    }
+}
+
+@media (max-width: 768px) {
+    .debtor-details, .transaction-details {
+        position: relative; /* Remove fixed positioning */
+        width: 101%; /* Keep full width within parnt */
+        max-height: 40vh; /* Maintain scrollable height */
+        overflow-y: auto; /* Keep scrollable */
+        padding: 5px; /* Adjust padding for smaller screens */
+        background-color: var(--container-bg);
+        z-index: auto; /* Reset z-index to default stacking */
+        box-sizing: border-box;
+    }
+
+    .debtor-details ul, .transaction-details ul {
+        margin: 5px 0; /* Reduce margin */
+        padding: 0; /* Remove padding */
+        list-style: none;
+    }
+
+    .debtor-details li, .transaction-details li {
+        font-size: 3px; /* Slightly smaller font size */
+        padding: 8px 12px; /* Reduced padding */
+        margin: 4px 0; /* Reduced margin */
+        border-radius: 8px;
+        background-color: var(--container-bg);
+        box-shadow: 0 2px 8px var(--shadow-color);
+        border-left: 3px solid var(--info-color);
+    }
+
+    .debtor-details .overdue, .transaction-details .overdue {
+        border-left: 3px solid var(--danger-color);
+        background-color: rgba(244, 67, 54, 0.1);
+    }
+
+    .debtor-details, .transaction-details {
+    display: none; /* Hidden by default */
+}
+
+.debtor-details.active, .transaction-details.active {
+    display: block; /* Show when toggled */
+}
+
+}
+
+.close-debtor-details, .close-transaction-details {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .debtor-header {
+        font-size: 1.125rem; /* Match desktop font size */
+        font-weight: 700;
+    }
+
+    .debtor-details li span, .transaction-details li span {
+        font-size: 1rem; /* Match desktop font size */
+        margin-top: 2px; /* Adjust spacing */
+    }
+
+    .product-name {
+        font-weight: 600;
+        font-size: 1rem; /* Match desktop */
+    }
+
+    .product-meta, .product-price {
+        font-size: 0.9rem; /* Slightly smaller but consistent */
+    }
+}
+
+
+@media (max-width: 768px) {
+  /* Reduce space around the transaction list container */
+  .debtor-details ul {
+    margin: 5px 0; /* Reduce top and bottom margin */
+    padding: 0; /* Remove any default padding if present */
+  }
+
+  /* Reduce size and spacing of individual transaction items (list items) */
+  .debtor-details ul li {
+    font-size: 4px; /* Reduce font size for the text inside list items */
+    padding: 1px 10px 1px 1px; /* Reduce padding, especially on the right */
+    margin: 4px 0px; /* Reduce vertical margin between list items */
+  }
+
+  /* If there are specific elements within the li that need sizing adjustments, target them here */
+  /* For example, if each li has spans for date, description, amount: */
+  /*
+  .debtor-details ul li span {
+    font-size: 12px;
+  }
+  */
+}
+
+@media (max-width: 768px) {
+  ul#debtors-list {
+    gap: 5px; /* Or any smaller value you prefer */
+  }
+}
+
+/* Additional Media Query for Smartphones */
+@media (max-width: 480px) {
+    /* Debtors List */
+    #debtors-list li {
+        padding-right: 0px;
+        font-size: 0.9rem;
+    }
+    .debtor-header {
+        font-size: 1rem;
+    }
+    .toggle-details {
+        font-size: 1.2rem;
+        width: 2rem;
+        height: 2rem;
+    }
+
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        margin: 5% auto;
+        padding: 1rem;
+        max-height: 95vh;
+    }
+
+    /* Dashboard */
+    .chart-container {
+        height: 300px;
+    }
+    .dashboard-summary {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .summary-card {
+        padding: 12px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 90vw;
+    }
+    .hamburger-menu {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+
+    input, select, textarea {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+
+    /* Overflow Handling */
+    body {
+        overflow-x: hidden;
+    }
+    #debtors-list {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    .debtor-details ul {
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+
+    /* Product Inventory and Checkout */
+    #products-list {
+        grid-template-columns: 1fr;
+    }
+    .product-entry {
+        grid-template-columns: 1fr;
+    }
+}
+
+#add-product-entry {
+    width: 100%;
+    max-width: 800px;
+    margin: 0px auto;
+    display: block;
+}
+
+/* Style for the print selection modal content */
+#print-selection-modal .modal-content {
+    width: 90%;
+    max-width: 600px;
+    margin: 10% auto;
+    padding: 30px;
+    background-color: var(--modal-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    border: 1px solid var(--shadow-color);
+}
+
+/* Style for the transaction selection list */
+#transaction-selection-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+}
+
+#transaction-selection-list div {
+    padding: 15px;
+    border-bottom: 1px solid var(--shadow-color);
+    transition: background-color 0.2s;
+}
+
+#transaction-selection-list div:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+#transaction-selection-list div:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#transaction-selection-list label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#transaction-selection-list input[type="checkbox"] {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent-color);
+}
+
+/* Style for the buttons */
+#print-selected-btn,
+#print-all-btn,
+#print-selection-modal .cancel-btn {
+    margin: 5px 5px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--accent-color);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+#print-selected-btn:hover,
+#print-all-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+#print-selection-modal .cancel-btn {
+    background-color: var(--danger-color);
+}
+
+#print-selection-modal .cancel-btn:hover {
+    background-color: #c62828;
+}
+
+/* Icons for buttons (assuming Font Awesome is included) */
+#print-selected-btn::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+#print-all-btn::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+#print-selection-modal .cancel-btn::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+/* Style the modal title for consistency */
+#print-selection-modal h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    #print-selection-modal .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    #transaction-selection-list {
+        max-height: 300px;
+    }
+
+    #transaction-selection-list label {
+        font-size: 14px;
+    }
+
+    #transaction-selection-list input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+
+    #print-selected-btn,
+    #print-all-btn,
+    #print-selection-modal .cancel-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+
+.edit-btn {
+    background-color: var(--info-color) !important;
+    color: white;
+}
+
+.overdue-indicator {
+   background-color: #ff4444;
+   color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+            display: inline-block;
+            box-shadow: 0 1px 3px rgba(255, 68, 68, 0.3);
+            animation: pulse-red 2s infinite;
+
+}
+
+        /* Optional: Add a pulsing animation to draw attention */
+@keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+            }
+}
+
+        /* Alternative simpler version without animation */
+.overdue-indicator.simple {
+            background-color: #dc3545;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 8px;
+            display: inline-block;
+            border: 1px solid #c82333;
+}
+
+        /* Dark theme support */
+@media (prefers-color-scheme: dark) {
+            .overdue-indicator {
+                background-color: #ff6b6b;
+                border: 1px solid #ff5252;
+            }
+}
+
+        /* Demo section - remove this from your actual implementation */
+.demo-section {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+}
+        
+.debtor-entry {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            gap: 2px;
+}
+        
+.debtor-header {
+            font-size: 18px;
+            font-weight: 700;
+
+}
+
+/* Make the transaction list container more compact */
+.debtor-details {
+    margin-top: 10px; /* Reduced from 18px */
+    padding-top: 10px; /* Reduced from 18px */
+    max-height: 500px; /* Optional: Limit height and add scroll if needed */
+    overflow-y: auto; /* Add scroll if the list is long */
+}
+
+/* Reduce spacing in the list */
+.debtor-details ul {
+    padding-left: 0;
+    margin: 5px 0; /* Reduced margin */
+    gap: 4px; /* Reduced gap between items if using display: grid/flex */
+}
+
+/* Make each transaction item smaller */
+.debtor-details li {
+    padding: 8px 12px; /* Reduced from 12px 16px */
+    margin: 4px 0; /* Reduced from 8px 0 */
+    font-size: 0.875rem; /* Smaller font size (14px equivalent) */
+    border-radius: 6px; /* Slightly smaller radius for compactness */
+}
+
+/* Reduce font sizes for sub-elements inside transactions */
+.debtor-details li span {
+    font-size: 0.75rem; /* Smaller text (12px equivalent) */
+    margin-top: 2px; /* Reduced spacing */
+}
+
+.product-info {
+    flex-direction: column; /* Stack on small screens for better fit */
+    gap: 2px; /* Reduced gap */
+}
+
+.product-name {
+    font-size: 0.875rem; /* Smaller font */
+}
+
+.product-meta,
+.product-price {
+    font-size: 0.75rem; /* Smaller font */
+}
+
+/* Overdue items (keep visible but compact) */
+.debtor-details .overdue {
+    padding: 8px 12px; /* Match reduced padding */
+}
+
+@media (max-width: 768px) {
+    /* Override for smaller screens */
+    .debtor-details ul {
+        margin: 3px 0; /* Even smaller margin */
+        padding: 0;
+    }
+
+    .debtor-details li {
+        font-size: 0.75rem; /* 12px - fix the existing 4px typo, which is too small to read */
+        padding: 6px 10px; /* Further reduced */
+        margin: 2px 0;
+    }
+
+    .debtor-details li span {
+        font-size: 0.7rem; /* ~11px */
+    }
+
+    ul#debtors-list {
+        gap: 3px; /* Reduced from 5px */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ultra-compact for small phones */
+    .debtor-details {
+        max-height: 500px; /* Shorter scrollable area */
+    }
+
+    .debtor-details li {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        margin: 2px 0;
+    }
+
+    .product-info {
+        font-size: 0.7rem;
+    }
+}
+
+/* Media Query Adjustments */
+@media (max-width: 768px) {
+    #main-container {
+        width: 100%;
+        margin: 0px;
+        padding: 3px
+    }
+
+    #debtors-list {
+        max-height: calc(100vh - 150px); /* Adjust for smaller screens */
+    }
+
+    .add-btn, .checkout-btn {
+        bottom: 1rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        font-size: 1.5rem;
+    }
+
+    .checkout-btn {
+        right: 6rem; /* Adjusted offset for smaller screens */
+    }
+}
+
+
+/* For desktop - arrange in a single row */
+@media (min-width: 769px) {
+    .product-entry {
+        grid-template-areas:
+            "name quantity price total remove";
+        grid-template-columns: 2fr 1fr 1fr 2fr auto;
+        grid-template-rows: auto;
+    }
+    
+    .product-entry .product-name-wrapper {
+        grid-area: name;
+    }
+    
+    .product-entry .product-quantity {
+        grid-area: quantity;
+    }
+    
+    .product-entry .product-price {
+        grid-area: price;
+    }
+    
+    .product-entry .product-total {
+        grid-area: total;
+    }
+    
+    .product-entry .remove-product-entry {
+        grid-area: remove;
+    }
+}
+
+/* For tablets and mobile - stack vertically but keep total and remove on same row */
+@media (max-width: 768px) {
+    .product-entry {
+        grid-template-areas:
+            "name name name name name"
+            "quantity quantity price price price"
+            "total total total remove remove";
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: auto auto auto;
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    .product-entry .product-name-wrapper {
+        grid-area: name;
+    }
+    
+    .product-entry .product-quantity {
+        grid-area: quantity;
+    }
+    
+    .product-entry .product-price {
+        grid-area: price;
+    }
+    
+    .product-entry .product-total {
+        grid-area: total;
+        text-align: left;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .product-entry .remove-product-entry {
+        grid-area: remove;
+        justify-self: end;
+        align-self: center;
+    }
+}
+
+/* For very small screens - keep the same layout as tablets */
+@media (max-width: 480px) {
+    .product-entry {
+        grid-template-areas:
+            "name name name name name"
+            "quantity quantity price price price"
+            "total total total remove remove";
+        gap: 6px;
+        padding: 6px;
+    }
+    
+    .product-entry .product-total {
+        font-size: 14px;
+        padding: 8px 0;
+    }
+    
+    .product-entry .remove-product-entry {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .checkout-btn {
+        top: 0.3rem; /* Keep at top on mobile */
+        right: 2rem; /* Keep on right side */
+        width: 3rem; /* Maintain size */
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+    
+    .sidebar.active ~ .checkout-btn {
+        right: 0.5rem; /* Don't move when sidebar is open on mobile */
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .checkout-btn {
+        width: 2.5rem; /* Match hamburger menu small screen size */
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+}
+
+/* Responsive adjustments for add button */
+@media (max-width: 768px) {
+    .add-btn {
+        right: 0.5rem; /* Maintain right positioning on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .add-btn {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+        right: 0.8rem; /* Maintain right positioning on small screens */
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #payment-product-choices {
+        grid-template-rows: auto auto; /* Maintain two rows on tablets */
+        gap: 8px;
+    }
+    
+    .product-choice-button {
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    #payment-product-choices {
+        grid-template-rows: auto auto; /* Keep two rows even on small phones */
+        gap: 6px;
+    }
+    
+    .product-choice-button {
+        padding: 10px 12px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
+}
+
+/* If you want more rows for very long lists, uncomment and adjust below */
+@media (max-width: 360px) {
+    #payment-product-choices {
+        grid-template-rows: repeat(3, auto); /* Three rows for very small screens */
+    }
+}
+
+/* Tablet responsive adjustments */
+@media (max-width: 768px) {
+    #archive-modal .archived-debtor {
+        padding: 12px;
+    }
+
+    #archive-modal .archived-debtor .debtor-info h4 {
+        font-size: 15px;
+    }
+
+    #archive-modal .archived-debtor .debtor-info p {
+        font-size: 13px;
+    }
+
+    #archive-modal .archived-debtor .button-group {
+        margin-top: 10px;
+        gap: 8px;
+    }
+
+    #archive-modal .restore-btn, 
+    #archive-modal .delete-permanent-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        min-width: 95px;
+    }
+
+    #archive-list {
+        max-height: calc(100vh - 100px);
+    }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    #archive-modal .archived-debtor {
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+
+    #archive-modal .archived-debtor .debtor-info h4 {
+        font-size: 14px;
+        margin: 0 0 3px 0;
+        word-break: break-word;
+    }
+
+    #archive-modal .archived-debtor .debtor-info p {
+        font-size: 12px;
+        margin: 1px 0 6px 0;
+        opacity: 0.8;
+    }
+
+    #archive-modal .archived-debtor .button-group {
+        margin-top: 8px;
+        gap: 6px;
+    }
+
+    #archive-modal .restore-btn, 
+    #archive-modal .delete-permanent-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 85px;
+    }
+
+    #archive-modal .restore-btn i, 
+    #archive-modal .delete-permanent-btn i {
+        font-size: 11px;
+    }
+
+    #archive-list {
+        max-height: calc(100vh - 80px);
+        margin: 0;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    #archive-modal .archived-debtor {
+        padding: 8px;
+    }
+
+    #archive-modal .archived-debtor .debtor-info h4 {
+        font-size: 13px;
+    }
+
+    #archive-modal .archived-debtor .debtor-info p {
+        font-size: 11px;
+        margin: 1px 0 5px 0;
+    }
+
+    #archive-modal .archived-debtor .button-group {
+        margin-top: 6px;
+        gap: 5px;
+    }
+
+    #archive-modal .restore-btn, 
+    #archive-modal .delete-permanent-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+        min-width: 80px;
+    }
+
+    #archive-modal .modal-content {
+        padding: 12px;
+    }
+
+    #archive-list {
+        max-height: 95vh;
+    }
+}
+
+.hamburger-menu {
+    border: none;
+    outline: none;
+}
+
+.hamburger-menu:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .hamburger-menu {
+        top: 5px;
+        left: 5px;
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+    
+    .sidebar {
+        width: 90vw;
+    }
+}
+
+/* Role-based styling additions for debt.css */
+
+/* Profile Role Display */
+#profile-role {
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+}
+
+/* Role-specific colors */
+.role-super-admin {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: 2px solid #ff6b6b;
+}
+
+.role-admin {
+    background: linear-gradient(135deg, var(--accent-color), var(--info-color));
+    color: white;
+    border: 2px solid var(--accent-color);
+}
+
+.role-sub-admin {
+    background: linear-gradient(135deg, var(--secondary-color), #9c88ff);
+    color: white;
+    border: 2px solid var(--secondary-color);
+}
+
+/* Account type select styling */
+#new-account-type {
+    width: 100%;
+    padding: 16px 20px;
+    margin: 4px 0;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px var(--shadow-color);
+    font-weight: 600;
+}
+
+#new-account-type:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(56, 178, 172, 0.2);
+}
+
+/* Disabled state styling */
+.form-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.permission-denied {
+    background-color: #ffebee !important;
+    color: #c62828 !important;
+    cursor: not-allowed !important;
+}
+
+.permission-denied:hover {
+    background-color: #ffcdd2 !important;
+    transform: none !important;
+}
+
+/* Role indicator in user lists (for future user management) */
+.user-role-badge {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.user-role-badge.super-admin {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.user-role-badge.admin {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.user-role-badge.sub-admin {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* Enhanced profile info section */
+#profile-info {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 44, 191, 0.1));
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+#profile-info .profile-field {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#profile-info .profile-field:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+#profile-info .profile-field label {
+    font-weight: 600;
+    color: var(--accent-color);
+    min-width: 120px;
+    text-align: left;
+}
+
+#profile-info .profile-field span {
+    color: var(--text-color);
+    font-weight: 500;
+    text-align: right;
+}
+
+/* Form labels styling */
+.modal-content form label {
+    display: block;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-content form label:first-of-type {
+    margin-top: 0;
+}
+
+/* Enhanced select dropdown */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 48px;
+}
+
+/* Responsive adjustments for role display */
+@media (max-width: 768px) {
+    #profile-info .profile-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    #profile-info .profile-field label {
+        min-width: auto;
+        text-align: left;
+    }
+    
+    #profile-info .profile-field span {
+        text-align: left;
+        width: 100%;
+    }
+    
+    #profile-role {
+        font-size: 12px;
+        padding: 3px 10px;
+        min-width: 70px;
+    }
+}
+
+/* Permission denied message styling */
+.permission-message {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--danger-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+    border-left: 4px solid var(--danger-color);
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Success message for account creation */
+.success-message {
+    background-color: rgba(6, 214, 160, 0.1);
+    color: var(--success-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+    border-left: 4px solid var(--success-color);
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Enhanced button states for role-restricted actions */
+button:disabled,
+button.disabled {
+    background-color: #cccccc !important;
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+button:disabled:hover,
+button.disabled:hover {
+    background-color: #cccccc !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Add these CSS rules to your debt.css file after the existing role-based styling */
+
+/* Super Admin role styling */
+.role-super-admin {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: 2px solid #ff6b6b;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    animation: super-admin-glow 3s ease-in-out infinite alternate;
+}
+
+/* Super admin glow animation */
+@keyframes super-admin-glow {
+    from {
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    to {
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+    }
+}
+
+/* User role badge for super admin */
+.user-role-badge.super-admin {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    font-weight: 700;
+    border: 1px solid #ff6b6b;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-role-badge.super-admin::before {
+    content: '👑';
+    margin-right: 4px;
+    font-size: 10px;
+}
+
+/* Enhanced super admin profile display */
+#profile-role.super-admin {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: 2px solid #ff6b6b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    position: relative;
+}
+
+#profile-role.super-admin::before {
+    content: '👑 ';
+    font-size: 14px;
+}
+
+/* Super Admin account creation form styling */
+#new-account-type option[value="super_admin"] {
+    background-color: #ff6b6b;
+    color: white;
+    font-weight: bold;
+}
+
+/* Special styling for super admin create account button */
+.super-admin #create-account-btn {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: 2px solid #ff6b6b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.super-admin #create-account-btn:hover {
+    background: linear-gradient(135deg, #feca57, #ff6b6b);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Super admin sidebar button styling */
+.super-admin .sidebar-btn {
+    border-left: 4px solid #ff6b6b;
+}
+
+.super-admin .profile-btn {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    border: 2px solid #ff6b6b;
+    font-weight: 700;
+}
+
+/* Super admin modal headers */
+.super-admin .modal-content h2 {
+    color: #ff6b6b;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 8px;
+}
+
+/* Super admin form buttons */
+.super-admin .form-buttons button[type="submit"] {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    border: 2px solid #ff6b6b;
+    font-weight: 600;
+}
+
+.super-admin .form-buttons button[type="submit"]:hover {
+    background: linear-gradient(135deg, #feca57, #ff6b6b);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+}
+
+/* Super admin notification styling */
+.super-admin-notice {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(254, 202, 87, 0.1));
+    border: 2px solid #ff6b6b;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    color: #d63031;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+}
+
+.super-admin-notice::before {
+    content: '👑';
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Responsive adjustments for super admin styling */
+@media (max-width: 768px) {
+    .role-super-admin {
+        font-size: 11px;
+        padding: 2px 8px;
+        animation: none; /* Disable animation on mobile for performance */
+    }
+    
+    #profile-role.super-admin {
+        font-size: 11px;
+        letter-spacing: 0.5px;
+    }
+    
+    #profile-role.super-admin::before {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .super-admin-notice {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+    
+    .super-admin-notice::before {
+        font-size: 14px;
+    }
+    
+    .role-super-admin {
+        font-size: 10px;
+        padding: 1px 6px;
+    }
+}
+
+/* Special hover effects for super admin elements */
+.super-admin .sidebar-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(254, 202, 87, 0.1));
+    border-left-color: #feca57;
+}
+
+/* Super admin access indicator in profile modal */
+.super-admin-access-indicator {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-left: 8px;
+    animation: pulse-super-admin 2s infinite;
+}
+
+@keyframes pulse-super-admin {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Add these styles to your debt.css file */
+
+/* Desktop layout - keep buttons on the right */
+/* @media (min-width: 769px) {
+    #archive-modal .archived-debtor {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "header header"
+            "info buttons"
+            "debt buttons"
+            "archived buttons";
+        gap: 8px;
+        align-items: start;
+    }
+    
+    #archive-modal .debtor-header {
+        grid-area: header;
+    }
+    
+    #archive-modal .debtor-header strong {
+        display: block;
+        margin-bottom: 4px;
+    }
+    
+    #archive-modal .archived-debtor > div:nth-child(2) {
+        grid-area: info;
+    }
+    
+    #archive-modal .archived-debtor > div:nth-child(3) {
+        grid-area: debt;
+    }
+    
+    #archive-modal .archived-debtor > div:nth-child(4) {
+        grid-area: archived;
+    }
+    
+    #archive-modal .button-group {
+        grid-area: buttons;
+        flex-direction: column;
+        align-self: center;
+    }
+} */
+
+/* Mobile layout - buttons below information */
+@media (max-width: 768px) {
+    #archive-modal .archived-debtor {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #archive-modal .debtor-header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 8px;
+    }
+    
+    #archive-modal .debtor-header strong {
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+    
+    #archive-modal .archived-debtor > div {
+        margin: 2px 0;
+        font-size: 14px;
+    }
+    
+    #archive-modal .button-group {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        margin-top: 12px;
+        width: 100%;
+    }
+    
+    #archive-modal .restore-btn,
+    #archive-modal .delete-permanent-btn {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    #archive-modal .button-group {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    #archive-modal .restore-btn,
+    #archive-modal .delete-permanent-btn {
+        width: 100%;
+    }
+}
+
+/* Add these styles to your debt.css file */
+
+/* Full screen sent reminders modal on mobile */
+@media (max-width: 768px) {
+    #sent-reminders-modal {
+        padding: 0;
+    }
+    
+    #sent-reminders-modal .modal-content {
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        padding: 16px;
+        overflow-y: auto;
+    }
+    
+    #sent-reminders-modal h2 {
+        position: sticky;
+        top: -12px;
+        background-color: var(--modal-bg);
+        z-index: 10;
+        padding: 16px 0;
+        margin: 0 0 16px 0;
+        border-bottom: 2px solid var(--shadow-color);
+    }
+    
+    #sent-reminders-modal .close-modal {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 11;
+        background-color: var(--modal-bg);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 2px 8px var(--shadow-color);
+    }
+    
+    #sent-reminders-list {
+        max-height: none;
+        padding-bottom: 20px;
+    }
+    
+    /* Optimize reminder items for mobile */
+    .reminder-item {
+        padding: 12px;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    
+    .reminder-header {
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .reminder-status {
+        align-self: flex-start;
+    }
+    
+    .reminder-message {
+        font-size: 13px;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+    
+    .delete-reminder-btn {
+        width: 100%;
+        margin-top: 8px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .delete-reminder-btn:hover {
+        background-color: #d32f2f !important;
+    }
+}
+
+.delete-reminder-btn {
+    background-color: var(--danger-color) !important;
+    color: white !important;
+}
+
+.delete-reminder-btn:hover {
+    background-color: #d32f2f !important;
+    transform: translateY(-2px);
+}
+
+.delete-reminder-btn:active {
+    transform: translateY(0);
+}
+
+/* Very small screens optimization */
+@media (max-width: 480px) {
+    #sent-reminders-modal .modal-content {
+        padding: 12px;
+    }
+    
+    #sent-reminders-modal h2 {
+        font-size: 18px;
+        padding: 12px 0;
+    }
+    
+    .reminder-item {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .reminder-message {
+        font-size: 12px;
+    }
+}
+
+/* Full screen product inventory modal on mobile */
+@media (max-width: 768px) {
+    #products-modal {
+        padding: 0;
+    }
+    
+    #products-modal .modal-content {
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        padding: 16px;
+        overflow-y: auto;
+    }
+    
+    #products-modal h2 {
+        position: sticky;
+        top: -12px;
+        background-color: var(--modal-bg);
+        z-index: 10;
+        padding: 16px 0 12px 0;
+        margin: 0 0 0px 0;
+        border-bottom: 2px solid var(--shadow-color);
+        font-size: 20px;
+    }
+    
+    #products-modal .close-modal {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 11;
+        background-color: var(--modal-bg);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 2px 8px var(--shadow-color);
+    }
+    
+    #product-search {
+        position: sticky;
+        top: 46px;
+        z-index: 9;
+        background-color: var(--modal-bg);
+        padding-bottom: 12px;
+    }
+    
+    #add-product-inventory-btn {
+        position: sticky;
+        top: 97px;
+        z-index: 9;
+        background-color: var(--modal-bg);
+        padding-bottom: 12px;
+    }
+    
+    /* 3-column grid for products on mobile */
+    #products-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding-bottom: 20px;
+    }
+    
+    #products-list li {
+        padding: 10px 8px;
+        font-size: 12px;
+        gap: 6px;
+    }
+    
+    #products-list li span {
+        font-size: 11px;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+    
+    #products-list .edit-product-btn,
+    #products-list .delete-product-btn {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+    
+    #products-list .edit-product-btn i,
+    #products-list .delete-product-btn i {
+        font-size: 10px;
+    }
+}
+
+/* Very small screens - 2 columns for better readability */
+@media (max-width: 480px) {
+    #products-modal .modal-content {
+        padding: 12px;
+    }
+    
+    #products-modal h2 {
+        font-size: 18px;
+    }
+    
+    #products-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    #products-list li {
+        padding: 8px 6px;
+    }
+    
+    #products-list li span {
+        font-size: 12px;
+    }
+}
+
+/* Landscape mode on small screens - keep 3 columns */
+@media (max-width: 768px) and (orientation: landscape) {
+    #products-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* User Management Styles */
+#user-management-modal .modal-content {
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.user-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 44, 191, 0.1));
+    padding: 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+}
+
+.stat-card h3 {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.stat-card p {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin: 0;
+}
+
+#user-search {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 2px solid var(--accent-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: var(--transition);
+}
+
+#user-search:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 10px rgba(123, 44, 191, 0.2);
+}
+
+#users-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-item {
+    background: var(--bg-color);
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    border-left: 4px solid var(--accent-color);
+    transition: var(--transition);
+}
+
+.user-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.user-item.deactivated {
+    opacity: 0.6;
+    border-left-color: #cccccc;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-info .user-name {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.user-info .user-email {
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.user-info .user-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.user-info .user-meta span {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.user-status {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.user-status.deactivated {
+    background-color: #cccccc;
+    color: #666666;
+}
+
+.user-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.toggle-user-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toggle-user-btn.deactivate {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.toggle-user-btn.activate {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.toggle-user-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .user-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .user-actions {
+        width: 100%;
+    }
+    
+    .toggle-user-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-card p {
+        font-size: 24px;
+    }
+    
+    .user-item {
+        padding: 12px;
+    }
+}
