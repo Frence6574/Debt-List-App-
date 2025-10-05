@@ -70,6 +70,8 @@ node_modules/
 
 # Firebase service account key
 serviceAccountKey.json
+serviceAccountKey.json.json
 
 # Sensitive files
 serviceAccountKey.json
+serviceAccountKey.json.json
