@@ -1,14 +1,19 @@
 require('dotenv').config();
 const express = require('express');
-const fetch = require('node-fetch').default;
+const fetch = require('node-fetch');
 const cors = require('cors');
 const admin = require('firebase-admin');  // Move require here
 
 // Initialize Firebase Admin FIRST
 try {
+    // Use environment variable for service account JSON, or local file for development
+    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT) : require('./test-debt-63eb7-firebase-adminsdk-fbsvc-fd655d0ab2.json');
+    if (!serviceAccount || Object.keys(serviceAccount).length === 0) {
+        throw new Error('Firebase service account not configured');
+    }
     admin.initializeApp({
-        credential: admin.credential.cert(require('./serviceAccountKey.json')),
-        databaseURL: "https://test-debt-63eb7-default-rtdb.firebaseio.com"  // Add this line
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://test-debt-63eb7-default-rtdb.firebaseio.com"
     });
     console.log('Firebase Admin initialized successfully');
 } catch (error) {
