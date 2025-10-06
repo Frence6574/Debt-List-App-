@@ -18,7 +18,7 @@ try {
     console.log('Firebase Admin initialized successfully');
 } catch (error) {
     console.error('Failed to initialize Firebase Admin:', error);
-    process.exit(1);
+    console.log('Continuing without Firebase - some endpoints may not work');
 }
 
 const app = express();
