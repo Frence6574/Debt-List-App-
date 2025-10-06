@@ -51,6 +51,9 @@ const USER_ROLES = {
     SUPER_ADMIN: 'super_admin' // Add this new role
 };
 
+// API Base URL - dynamically set based on environment
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname.match(/^192\.168\./) || window.location.hostname.match(/^10\./) || window.location.hostname.match(/^172\./) ? 'http://localhost:3000' : 'https://debt-app-bki7-7s6oepd8t-frence-jhon-carbolidos-projects.vercel.app';
+
 const SUPER_ADMIN_EMAIL = 'carbolidofrencejhon@gmail.com';
 
 // Firebase instance
@@ -575,7 +578,7 @@ function createLocalStorageInstance() {
 // ========================
 async function sendSMS(phoneNumber, message) {
     try {
-        const response = await fetch('http://localhost:3000/send-reminder', {
+        const response = await fetch(`${API_BASE}/send-reminder`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -599,7 +602,7 @@ async function sendSMS(phoneNumber, message) {
 
 async function sendNewTransactionSMS(phoneNumber, debtorName, transaction) {
     try {
-        const response = await fetch('http://localhost:3000/send-new-transaction-sms', {
+        const response = await fetch(`${API_BASE}/send-new-transaction-sms`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phoneNumber, debtorName, transaction })
@@ -615,7 +618,7 @@ async function sendNewTransactionSMS(phoneNumber, debtorName, transaction) {
 
 async function sendReminderSMS(phoneNumber, message) {
     try {
-        const response = await fetch('http://localhost:3000/send-reminder', {
+        const response = await fetch(`${API_BASE}/send-reminder`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phoneNumber, message })
@@ -632,7 +635,7 @@ async function sendReminderSMS(phoneNumber, message) {
 async function sendPaymentReceiptSMS(phoneNumber, debtorName, amount, remainingBalance) {
     try {
         console.log('Attempting to send SMS with:', { phoneNumber, debtorName, amount, remainingBalance });
-        const response = await window.fetch('http://localhost:3000/send-payment-receipt', {
+        const response = await window.fetch(`${API_BASE}/send-payment-receipt`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phoneNumber, debtorName, amount, remainingBalance })
