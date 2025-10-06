@@ -52,6 +52,7 @@ Your total debt is now ₱${totalDebt.toFixed(2)}.
 Please contact us if you have any questions.`;
 
     try {
+        console.log('Sending SMS to:', phoneNumber);
         const response = await fetch('https://api.semaphore.co/api/v4/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -63,7 +64,9 @@ Please contact us if you have any questions.`;
             })
         });
 
+        console.log('Semaphore response status:', response.status, response.statusText);
         const data = await response.json();
+        console.log('Semaphore response data:', JSON.stringify(data, null, 2));
         if (!response.ok) throw new Error(data.message || 'SMS sending failed');
         res.json({ success: true, message: 'SMS sent successfully' });
     } catch (error) {
@@ -82,6 +85,7 @@ app.post('/send-reminder', async (req, res) => {
     }
 
     try {
+        console.log('Sending reminder SMS to:', phoneNumber);
         const response = await fetch('https://api.semaphore.co/api/v4/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -93,7 +97,9 @@ app.post('/send-reminder', async (req, res) => {
             })
         });
 
+        console.log('Semaphore response status:', response.status, response.statusText);
         const data = await response.json();
+        console.log('Semaphore response data:', JSON.stringify(data, null, 2));
         if (!response.ok) throw new Error(data.message || 'SMS sending failed');
         res.json({ success: true, message: 'Reminder sent successfully' });
     } catch (error) {
@@ -120,6 +126,7 @@ Your remaining balance is ₱${remainingBalance.toFixed(2)}.
 Thank you!`;
 
     try {
+        console.log('Sending payment receipt SMS to:', phoneNumber);
         const response = await fetch('https://api.semaphore.co/api/v4/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -131,8 +138,9 @@ Thank you!`;
             })
         });
 
+        console.log('Semaphore response status:', response.status, response.statusText);
         const data = await response.json();
-        console.log('Semaphore response:', data);
+        console.log('Semaphore response data:', JSON.stringify(data, null, 2));
         if (!response.ok) throw new Error(data.message || 'SMS sending failed');
         res.json({ success: true, message: 'SMS sent successfully' });
     } catch (error) {
