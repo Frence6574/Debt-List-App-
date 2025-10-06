@@ -14,16 +14,41 @@ try {
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL: "https://test-debt-63eb7-default-rtdb.firebaseio.com"
-    });
+   });
     console.log('Firebase Admin initialized successfully');
 } catch (error) {
     console.error('Failed to initialize Firebase Admin:', error);
     console.log('Continuing without Firebase - some endpoints may not work');
 }
 
+const path = require('path');
+
 const app = express();
-app.use(cors());
+
+// Configure CORS with options to allow localhost:5500 origin and handle preflight
+const corsOptions = {
+    origin: 'http://127.0.0.1:5500',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests for all routes
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
+
+// Serve static files from root directory or Public directory
+app.use(express.static(path.join(__dirname, 'Public')));
+app.use(express.static(path.join(__dirname)));
+
+// Serve index.html on root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // New Transaction SMS Endpoint
 app.post('/send-new-transaction-sms', async (req, res) => {
@@ -176,32 +201,38 @@ app.post('/delete-user', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 3001;
+
+// For Vercel deployment, export the app instead of listening
+if (process.env.VERCEL) {
+    module.exports = app;
+} else {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
 
 // Add this new endpoint after your existing endpoints
 
 app.post('/create-user', async (req, res) => {
     try {
         const { email, password, displayName, role, createdBy } = req.body;
-        
+
         console.log('Creating user:', { email, role });
-        
+
         if (!email || !password || !displayName || !role || !createdBy) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        
+
         // Create user in Firebase Auth using Admin SDK (won't affect current session)
         const userRecord = await admin.auth().createUser({
             email: email,
             password: password,
             displayName: displayName
         });
-        
+
         console.log('User created in Auth with UID:', userRecord.uid);
-        
+
         // Create user record in database
         const userData = {
             email: email,
@@ -211,22 +242,22 @@ app.post('/create-user', async (req, res) => {
             createdBy: createdBy,
             active: true
         };
-        
+
         await admin.database().ref(`users/${userRecord.uid}`).set(userData);
-        
+
         console.log('User record created in database');
-        
-        res.json({ 
-            success: true, 
+
+        res.json({
+            success: true,
             uid: userRecord.uid,
-            message: 'User created successfully' 
+            message: 'User created successfully'
         });
-        
+
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             error: error.message,
-            code: error.code 
+            code: error.code
         });
     }
 });
