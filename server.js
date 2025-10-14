@@ -1,56 +1,24 @@
 require('dotenv').config();
 const express = require('express');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch').default;
 const cors = require('cors');
-const admin = require('firebase-admin');
+const admin = require('firebase-admin');  // Move require here
 
 // Initialize Firebase Admin FIRST
 try {
-    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT ? 
-        JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT) : 
-        require('./test-debt-63eb7-firebase-adminsdk-fbsvc-fd655d0ab2.json');
-    
-    if (!serviceAccount || Object.keys(serviceAccount).length === 0) {
-        throw new Error('Firebase service account not configured');
-    }
-    
     admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: "https://test-debt-63eb7-default-rtdb.firebaseio.com"
+        credential: admin.credential.cert(require('./serviceAccountKey.json')),
+        databaseURL: "https://test-debt-63eb7-default-rtdb.firebaseio.com"  // Add this line
     });
     console.log('Firebase Admin initialized successfully');
 } catch (error) {
     console.error('Failed to initialize Firebase Admin:', error);
-    console.log('Continuing without Firebase - some endpoints may not work');
+    process.exit(1);
 }
 
-const path = require('path');
 const app = express();
-
-// CORS Configuration
-const corsOptions = {
-    origin: "*",
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: false,
-    optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
-
-// Handle preflight requests for all routes
-app.options('*', cors(corsOptions));
-
+app.use(cors());
 app.use(express.json());
-
-// Serve static files from root directory or Public directory
-app.use(express.static(path.join(__dirname, 'Public')));
-app.use(express.static(path.join(__dirname)));
-
-// Serve index.html on root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
 
 // New Transaction SMS Endpoint
 app.post('/send-new-transaction-sms', async (req, res) => {
@@ -79,7 +47,6 @@ Your total debt is now ₱${totalDebt.toFixed(2)}.
 Please contact us if you have any questions.`;
 
     try {
-        console.log('Sending SMS to:', phoneNumber);
         const response = await fetch('https://api.semaphore.co/api/v4/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -91,12 +58,8 @@ Please contact us if you have any questions.`;
             })
         });
 
-        console.log('Semaphore response status:', response.status, response.statusText);
         const data = await response.json();
-        console.log('Semaphore response data:', JSON.stringify(data, null, 2));
-        
         if (!response.ok) throw new Error(data.message || 'SMS sending failed');
-        
         res.json({ success: true, message: 'SMS sent successfully' });
     } catch (error) {
         console.error('Error sending new transaction SMS:', error);
@@ -114,7 +77,6 @@ app.post('/send-reminder', async (req, res) => {
     }
 
     try {
-        console.log('Sending reminder SMS to:', phoneNumber);
         const response = await fetch('https://api.semaphore.co/api/v4/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -126,12 +88,8 @@ app.post('/send-reminder', async (req, res) => {
             })
         });
 
-        console.log('Semaphore response status:', response.status, response.statusText);
         const data = await response.json();
-        console.log('Semaphore response data:', JSON.stringify(data, null, 2));
-        
         if (!response.ok) throw new Error(data.message || 'SMS sending failed');
-        
         res.json({ success: true, message: 'Reminder sent successfully' });
     } catch (error) {
         console.error('Error sending reminder SMS:', error);
@@ -139,7 +97,7 @@ app.post('/send-reminder', async (req, res) => {
     }
 });
 
-// Payment Receipt SMS Endpoint
+// New Payment Receipt SMS Endpoint
 app.post('/send-payment-receipt', async (req, res) => {
     const { phoneNumber, debtorName, amount, remainingBalance } = req.body;
 
@@ -157,7 +115,6 @@ Your remaining balance is ₱${remainingBalance.toFixed(2)}.
 Thank you!`;
 
     try {
-        console.log('Sending payment receipt SMS to:', phoneNumber);
         const response = await fetch('https://api.semaphore.co/api/v4/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -169,12 +126,9 @@ Thank you!`;
             })
         });
 
-        console.log('Semaphore response status:', response.status, response.statusText);
         const data = await response.json();
-        console.log('Semaphore response data:', JSON.stringify(data, null, 2));
-        
+        console.log('Semaphore response:', data);
         if (!response.ok) throw new Error(data.message || 'SMS sending failed');
-        
         res.json({ success: true, message: 'SMS sent successfully' });
     } catch (error) {
         console.error('SMS Send Error:', error.message);
@@ -182,7 +136,7 @@ Thank you!`;
     }
 });
 
-// User Deletion Endpoint
+// ADD THIS NEW ENDPOINT: User Deletion
 app.post('/delete-user', async (req, res) => {
     try {
         const { uid } = req.body;
@@ -209,26 +163,32 @@ app.post('/delete-user', async (req, res) => {
     }
 });
 
-// Create User Endpoint
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+// Add this new endpoint after your existing endpoints
+
 app.post('/create-user', async (req, res) => {
     try {
         const { email, password, displayName, role, createdBy } = req.body;
-
+        
         console.log('Creating user:', { email, role });
-
+        
         if (!email || !password || !displayName || !role || !createdBy) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-
-        // Create user in Firebase Auth using Admin SDK
+        
+        // Create user in Firebase Auth using Admin SDK (won't affect current session)
         const userRecord = await admin.auth().createUser({
             email: email,
             password: password,
             displayName: displayName
         });
-
+        
         console.log('User created in Auth with UID:', userRecord.uid);
-
+        
         // Create user record in database
         const userData = {
             email: email,
@@ -238,33 +198,22 @@ app.post('/create-user', async (req, res) => {
             createdBy: createdBy,
             active: true
         };
-
+        
         await admin.database().ref(`users/${userRecord.uid}`).set(userData);
-
+        
         console.log('User record created in database');
-
-        res.json({
-            success: true,
+        
+        res.json({ 
+            success: true, 
             uid: userRecord.uid,
-            message: 'User created successfully'
+            message: 'User created successfully' 
         });
-
+        
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({
+        res.status(500).json({ 
             error: error.message,
-            code: error.code
+            code: error.code 
         });
     }
 });
-
-const PORT = process.env.PORT || 3000;
-
-// For Vercel deployment, export the app instead of listening
-if (process.env.VERCEL) {
-    module.exports = app;
-} else {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-}

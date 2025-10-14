@@ -52,7 +52,7 @@ const USER_ROLES = {
 };
 
 // API Base URL - dynamically set based on environment
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname.match(/^192\.168\./) || window.location.hostname.match(/^10\./) || window.location.hostname.match(/^172\./) ? 'http://localhost:3000' : 'https://debt-app-bki7-7s6oepd8t-frence-jhon-carbolidos-projects.vercel.app';
+const API_BASE = 'http://localhost:3000';
 
 const SUPER_ADMIN_EMAIL = 'carbolidofrencejhon@gmail.com';
 
