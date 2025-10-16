@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const fetch = require('node-fetch').default;
-const cors = require('cors');
 const admin = require('firebase-admin');  // Move require here
 
 // Initialize Firebase Admin FIRST
@@ -16,12 +15,16 @@ try {
     process.exit(1);
 }
 
-const app = express();
-app.use(cors());
 app.use(express.json());
 
 // New Transaction SMS Endpoint
 app.post('/send-new-transaction-sms', async (req, res) => {
+    // Set CORS headers manually
+    res.setHeader('Access-Control-Allow-Origin', 'https://debt-list.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
     const { phoneNumber, debtorName, transaction } = req.body;
 
     if (!phoneNumber || !debtorName || !transaction) {
@@ -69,6 +72,12 @@ Please contact us if you have any questions.`;
 
 // Reminder SMS Endpoint
 app.post('/send-reminder', async (req, res) => {
+    // Set CORS headers manually
+    res.setHeader('Access-Control-Allow-Origin', 'https://debt-list.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
     const { phoneNumber, message } = req.body;
 
     if (!phoneNumber || !message) {
@@ -99,6 +108,12 @@ app.post('/send-reminder', async (req, res) => {
 
 // New Payment Receipt SMS Endpoint
 app.post('/send-payment-receipt', async (req, res) => {
+    // Set CORS headers manually
+    res.setHeader('Access-Control-Allow-Origin', 'https://debt-list.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
     const { phoneNumber, debtorName, amount, remainingBalance } = req.body;
 
     if (!phoneNumber || !debtorName || !amount || remainingBalance === undefined) {
@@ -138,11 +153,17 @@ Thank you!`;
 
 // ADD THIS NEW ENDPOINT: User Deletion
 app.post('/delete-user', async (req, res) => {
+    // Set CORS headers manually
+    res.setHeader('Access-Control-Allow-Origin', 'https://debt-list.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
     try {
         const { uid } = req.body;
-        
+
         console.log('Attempting to delete user with UID:', uid);
-        
+
         if (!uid) {
             return res.status(400).json({ error: 'User ID is required' });
         }
@@ -171,11 +192,17 @@ app.listen(PORT, () => {
 // Add this new endpoint after your existing endpoints
 
 app.post('/create-user', async (req, res) => {
+    // Set CORS headers manually
+    res.setHeader('Access-Control-Allow-Origin', 'https://debt-list.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
     try {
         const { email, password, displayName, role, createdBy } = req.body;
-        
+
         console.log('Creating user:', { email, role });
-        
+
         if (!email || !password || !displayName || !role || !createdBy) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
