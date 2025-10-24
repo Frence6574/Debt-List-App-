@@ -52,7 +52,7 @@ const USER_ROLES = {
 };
 
 // API Base URL - dynamically set based on environment
-const API_BASE = 'http://localhost:3000';
+const API_BASE = 'https://debt-list-app-iota.vercel.app/';
 
 const SUPER_ADMIN_EMAIL = 'carbolidofrencejhon@gmail.com';
 
