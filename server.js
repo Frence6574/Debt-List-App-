@@ -20,6 +20,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from Public directory
+app.use(express.static('Public'));
+
 // New Transaction SMS Endpoint
 app.post('/send-new-transaction-sms', async (req, res) => {
     const { phoneNumber, debtorName, transaction } = req.body;
