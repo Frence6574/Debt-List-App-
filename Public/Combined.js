@@ -3675,7 +3675,7 @@ async function createNewAccount(e) {
         
         console.log('Request body:', { ...requestBody, password: '[HIDDEN]' });
 
-        const response = await fetch('http://localhost:3000/create-user', {
+        const response = await fetch('https://debt-list-app-iota.vercel.app//create-user', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
@@ -4976,7 +4976,7 @@ async function deleteUserFromAuth(uid) {
     try {
         console.log('Sending delete request for UID:', uid);
         
-        const response = await fetch('http://localhost:3000/delete-user', {
+        const response = await fetch('https://debt-list-app-iota.vercel.app//delete-user', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
